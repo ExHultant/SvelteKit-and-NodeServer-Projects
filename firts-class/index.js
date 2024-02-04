@@ -4,14 +4,10 @@ import http from 'http';
 import * as api from './api/index.js';
 
 export const server = http.createServer((request, response) => {
-    api.methods(request, response);
-    response.writeHead(200);
-    response.write('Hello World');
+    api.methods(request, response);    
     response.end();    
 });
 
 server.listen(3000, () => {
     console.log('Servidor corriendo en el puerto 3000');
 });
-
-//Tarea: Solicitar la peticion mediante postman
