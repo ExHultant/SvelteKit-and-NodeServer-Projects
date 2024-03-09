@@ -1,7 +1,7 @@
 //Primera Clase de SvelteKit con Node JS
 //Creando un servidor con Node JS
 import http from 'http';
-import * as api from './api/index.js';
+import * as api from './api.js';
 
 export const server = http.createServer((request, response) => {
     api.methods(request, response);    
