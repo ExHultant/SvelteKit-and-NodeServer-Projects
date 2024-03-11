@@ -1,13 +1,12 @@
-//Primera Clase de SvelteKit con Node JS
-//Creando un servidor con Node JS
-import http from 'http';
-import * as api from './api.js';
+import http from 'http'
+import { routers } from './routers.js';
 
-export const server = http.createServer((request, response) => {
-    api.methods(request, response);    
-    response.end();    
+const port = 3000;
+
+const server = http.createServer((request, response) => {
+	routers(request, response);
 });
 
-server.listen(3000, () => {
-    console.log('Servidor corriendo en el puerto 3000');
+server.listen(port, () => {
+	console.log(`Servidor corriendo en el puerto ${port}`);
 });

@@ -1,5 +1,32 @@
 <script>
-	let productos = [];
+	import { writable } from 'svelte/store';
+
+	let productos = writable([]);
+	fetch('http://localhost:3000/products/')
+		.then((res) => res.json())
+		.then((data) => {
+			productos.set(data);
+		})
+		.catch((err) => console.error(err));
+
+	const deleteProduct = async (id) => {
+		try {
+			const response = await fetch(`http://localhost:3000/products/${id}`, {
+				method: 'DELETE'
+			});
+
+			if (!response.ok) {
+				throw new Error('Error al eliminar el producto');
+			}
+
+			// Actualiza la lista de productos
+			productos.update((currentProductos) =>
+				currentProductos.filter((producto) => producto.id !== id)
+			);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 </script>
 
 <div class="px-4 sm:px-6 lg:px-8">
@@ -31,41 +58,54 @@
 								>Descripción del Producto</th
 							>
 							<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-								<span class="sr-only">Edit</span>
+								<span class="sr-only">eliminar</span>
+							</th>
+							<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+								<span class="sr-only">Editar</span>
 							</th>
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200">
-						{#if productos.length === 0}
+						{#if $productos.length === 0}
 							<tr>
 								<td colspan="6" class="px-3 py-4 text-sm text-gray-500 text-center"
 									>No existen datos en la tabla</td
 								>
 							</tr>
 						{:else}
-							{#each productos as producto}
+							{#each $productos as producto}
 								<tr>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{producto.name}</td>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>$ {producto.price}</td
+										>{producto.nombre}</td
 									>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.amount}</td
+										>$ {producto.precio}</td
 									>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.category}</td
+										>{producto.cantidad}</td
 									>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.weight}</td
+										>{producto.categoria}</td
 									>
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{producto.peso}</td>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.description}</td
+										>{producto.descripcion}</td
 									>
 									<td
 										class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
 									>
+										<button
+											class="text-indigo-600 hover:text-indigo-900"
+											on:click={deleteProduct(producto.id)}
+										>
+											Eliminar<span class="sr-only">, {producto.name}</span></button
+										>
+									</td>
+									<td
+										class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+									>
 										<button class="text-indigo-600 hover:text-indigo-900"
-											>Eliminar<span class="sr-only">, {producto.name}</span></button
+											><a href="products/modify">Modificar</a></button
 										>
 									</td>
 								</tr>
