@@ -1,49 +1,92 @@
 <script>
-    export let title = '';
-    export let subtitle = '';
+	import { products } from '../stores/store.js';
+
+	export let subtitle = '';
 	export let button = '';
+
+	let title = '';
+	let price = '';
+	let stock = '';
+	let category = '';
+	let rating = '';
+	let description = '';
+
+	export const addProduct = async ({ fetch }, newProduct) => {
+		const productRes = await fetch('https://dummyjson.com/products/add', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(newProduct)
+		});
+		const productData = await productRes.json();
+
+		return productData;
+	};
+
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+
+		const newProduct = {
+			title,
+			price,
+			stock,
+			category,
+			rating,
+			description
+		};
+
+		const productData = await addProduct({ fetch: window.fetch }, newProduct);
+		console.log(productData);
+		window.alert('Producto agregado con éxito');
+		products.update((items) => [...items, productData]);
+	};
 </script>
 
 <div class="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
 	<div class="px-4 sm:px-0">
-		<h2 class="text-base font-semibold leading-7 text-gray-900">{title}</h2>
+		<h2 class="text-base font-semibold leading-7 text-gray-900">Añadir Producto</h2>
 		<p class="mt-1 text-sm leading-6 text-gray-600">{subtitle}</p>
 	</div>
 
-	<form class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
+	<form
+		on:submit={handleSubmit}
+		class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2"
+	>
 		<div class="px-4 py-6 sm:p-8">
 			<div class="sm:col-span-3">
-				<label for="NameProduct" class="block text-sm font-medium leading-6 text-gray-900"
+				<label for="title" class="block text-sm font-medium leading-6 text-gray-900"
 					>Nombre de Producto</label
 				>
 				<div class="mt-2">
 					<input
+						bind:value={title}
 						type="text"
-						name="NameProduct"
-						id="NameProduct"
+						name="title"
+						id="title"
 						class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 					/>
 				</div>
 			</div>
 
 			<div class="sm:col-span-3">
-				<label for="number" class="block text-sm font-medium leading-6 text-gray-900">Precio</label>
+				<label for="price" class="block text-sm font-medium leading-6 text-gray-900">Precio</label>
 				<div class="mt-2">
 					<input
+						bind:value={price}
 						type="number"
-						name="number"
-						id="number"
+						name="price"
+						id="price"
 						class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 					/>
 				</div>
 			</div>
 
 			<div class="sm:col-span-4">
-				<label for="number" class="block text-sm font-medium leading-6 text-gray-900">Stock</label>
+				<label for="stock" class="block text-sm font-medium leading-6 text-gray-900">Stock</label>
 				<div class="mt-2">
 					<input
-						id="number"
-						name="number"
+						bind:value={stock}
+						id="stock"
+						name="stock"
 						type="number"
 						class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 					/>
@@ -51,14 +94,14 @@
 			</div>
 
 			<div class="sm:col-span-4">
-				<label for="Categoria" class="block text-sm font-medium leading-6 text-gray-900"
+				<label for="category" class="block text-sm font-medium leading-6 text-gray-900"
 					>Categoria</label
 				>
 				<div class="mt-2">
 					<select
-						value="Categoria"
-						id="Categoria"
-						name="Categoria"
+						bind:value={category}
+						id="category"
+						name="category"
 						autocomplete="Categoria"
 						class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
 					>
@@ -70,26 +113,28 @@
 			</div>
 
 			<div class="col-span-full">
-				<label for="weight" class="block text-sm font-medium leading-6 text-gray-900">Peso</label>
+				<label for="rating" class="block text-sm font-medium leading-6 text-gray-900">Peso</label>
 				<div class="mt-2">
 					<input
+						bind:value={rating}
 						type="number"
-						name="weight"
-						id="weight"
+						name="rating"
+						id="rating"
 						class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 					/>
 				</div>
 			</div>
 
 			<div class="sm:col-span-2 sm:col-start-1">
-				<label for="city" class="block text-sm font-medium leading-6 text-gray-900"
+				<label for="description" class="block text-sm font-medium leading-6 text-gray-900"
 					>Descripción del Producto</label
 				>
 				<div class="mt-2">
 					<textarea
+						bind:value={description}
 						class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-						name="descriptionProduct"
-						id="descriptionProduct"
+						name="description"
+						id="description"
 						cols="30"
 						rows="10"
 					></textarea>

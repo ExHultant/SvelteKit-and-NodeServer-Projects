@@ -1,31 +1,16 @@
 <script>
-	import { writable } from 'svelte/store';
+	import { products as productsStore } from '../../stores/store.js';
+	export let data = [];
+	let { products } = data;
+	const deleteProduct = async (productId) => {
+		const response = await fetch(`https://dummyjson.com/products/${productId}`, {
+			method: 'DELETE'
+		});
+		const deletedProduct = await response.json();
 
-	let productos = writable([]);
-	fetch('http://localhost:3000/products/')
-		.then((res) => res.json())
-		.then((data) => {
-			productos.set(data);
-		})
-		.catch((err) => console.error(err));
+		products = products.filter((product) => product.id !== productId);
 
-	const deleteProduct = async (id) => {
-		try {
-			const response = await fetch(`http://localhost:3000/products/${id}`, {
-				method: 'DELETE'
-			});
-
-			if (!response.ok) {
-				throw new Error('Error al eliminar el producto');
-			}
-
-			// Actualiza la lista de productos
-			productos.update((currentProductos) =>
-				currentProductos.filter((producto) => producto.id !== id)
-			);
-		} catch (error) {
-			console.error(error);
-		}
+		return deletedProduct;
 	};
 </script>
 
@@ -66,39 +51,30 @@
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200">
-						{#if $productos.length === 0}
-							<tr>
-								<td colspan="6" class="px-3 py-4 text-sm text-gray-500 text-center"
-									>No existen datos en la tabla</td
-								>
-							</tr>
-						{:else}
-							{#each $productos as producto}
+						{#if $productsStore.length > 0}
+							{#each $productsStore as product}
 								<tr>
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.title}</td>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.nombre}</td
+										>$ {product.price}</td
+									>
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.stock}</td>
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+										>{product.category}</td
+									>
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.rating}</td
 									>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>$ {producto.precio}</td
-									>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.cantidad}</td
-									>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.categoria}</td
-									>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{producto.peso}</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-										>{producto.descripcion}</td
+										>{product.description}</td
 									>
 									<td
 										class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
 									>
 										<button
+											on:click={() => deleteProduct(product.id)}
 											class="text-indigo-600 hover:text-indigo-900"
-											on:click={deleteProduct(producto.id)}
 										>
-											Eliminar<span class="sr-only">, {producto.name}</span></button
+											Eliminar<span class="sr-only">, {product.title}</span></button
 										>
 									</td>
 									<td
@@ -110,6 +86,8 @@
 									</td>
 								</tr>
 							{/each}
+						{:else}
+							<p>No hay productos disponibles.</p>
 						{/if}
 					</tbody>
 				</table>
