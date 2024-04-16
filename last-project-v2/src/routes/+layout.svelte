@@ -73,7 +73,7 @@
                     <ul role="list" class="-mx-2 mt-2 space-y-1">
                       <li>
                         <a
-                          href="#"
+                          href="/add"
                           class="text-indigo-200 hover:text-white hover:bg-indigo-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                         >
                           <span
@@ -85,7 +85,7 @@
                       </li>
                       <li>
                         <a
-                          href="#"
+                          href="/modify"
                           class="text-indigo-200 hover:text-white hover:bg-indigo-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                         >
                           <span
@@ -97,7 +97,7 @@
                       </li>
                       <li>
                         <a
-                          href="users"
+                          href="/users"
                           class="text-indigo-200 hover:text-white hover:bg-indigo-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                         >
                           <span
@@ -161,7 +161,7 @@
                 <ul role="list" class="-mx-2 mt-2 space-y-1">
                   <li>
                     <a
-                      href="#"
+                      href="/add"
                       class="text-indigo-200 hover:text-white hover:bg-indigo-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                     >
                       <span
@@ -173,7 +173,7 @@
                   </li>
                   <li>
                     <a
-                      href="#"
+                      href="/modify"
                       class="text-indigo-200 hover:text-white hover:bg-indigo-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                     >
                       <span
@@ -185,7 +185,7 @@
                   </li>
                   <li>
                     <a
-                      href="users"
+                      href="/users"
                       class="text-indigo-200 hover:text-white hover:bg-indigo-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                     >
                       <span
